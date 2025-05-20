@@ -15,7 +15,6 @@ TP2_SO/
 ├── resultados/           # Saídas geradas pelas simulações
 ├── graphs/               # Scripts Python para análise e visualização
 ├── teste_simulador.sh    # Script para rodar todas as combinações automaticamente
-├── resultados_simulador.xlsx # Planilha gerada com as métricas coletadas
 └── README.md             # Este documento
 ```
 
