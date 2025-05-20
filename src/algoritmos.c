@@ -6,26 +6,39 @@
 
 static int clock_hand = 0;
 
+/**
+ * Algoritmo RANDOM: seleciona aleatoriamente um quadro para substituição.
+ */
 int substituir_pagina_random(Frame *quadros, int num_quadros) {
     return random() % num_quadros;
 }
 
+/**
+ * Algoritmo LRU (Least Recently Used): substitui o quadro com o menor timestamp.
+ */
 int substituir_pagina_lru(Frame *quadros, int num_quadros) {
     int lru_idx = -1;
     unsigned menor_tempo = UINT_MAX;
+
     for (int i = 0; i < num_quadros; i++) {
         if (quadros[i].ultimo_acesso < menor_tempo) {
             menor_tempo = quadros[i].ultimo_acesso;
             lru_idx = i;
         }
     }
+
     return lru_idx;
 }
 
+/**
+ * Algoritmo LFU (Least Frequently Used): substitui o quadro menos acessado.
+ * Em caso de empate na frequência, escolhe o mais antigo (LRU entre os LFU).
+ */
 int substituir_pagina_lfu(Frame *quadros, int num_quadros) {
     int lfu_idx = -1;
     unsigned menor_freq = UINT_MAX;
     unsigned mais_antigo = UINT_MAX;
+
     for (int i = 0; i < num_quadros; i++) {
         if (quadros[i].frequencia < menor_freq ||
             (quadros[i].frequencia == menor_freq && quadros[i].ultimo_acesso < mais_antigo)) {
@@ -34,9 +47,14 @@ int substituir_pagina_lfu(Frame *quadros, int num_quadros) {
             lfu_idx = i;
         }
     }
+
     return lfu_idx;
 }
 
+/**
+ * Algoritmo CLOCK: substitui o primeiro quadro com bit de referência 0.
+ * Caso contrário, limpa o bit e continua o ponteiro circular.
+ */
 int substituir_pagina_clock(Frame *quadros, int num_quadros) {
     while (1) {
         if (quadros[clock_hand].referenciado == 0) {
@@ -44,6 +62,7 @@ int substituir_pagina_clock(Frame *quadros, int num_quadros) {
             clock_hand = (clock_hand + 1) % num_quadros;
             return idx;
         }
+
         quadros[clock_hand].referenciado = 0;
         clock_hand = (clock_hand + 1) % num_quadros;
     }
