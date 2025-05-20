@@ -1,0 +1,19 @@
+# Objetos de compilação
+obj/
+bin/
+*.o
+
+# Arquivos de cache e backup
+*.log
+*.pyc
+__pycache__/
+*.swp
+.DS_Store
+
+# Dados gerados
+resultados/
+resultados_simulador.xlsx
+*.png
+
+.vscode/
+.venv/
