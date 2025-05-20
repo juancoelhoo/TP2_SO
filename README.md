@@ -94,3 +94,6 @@ pip install pandas matplotlib seaborn openpyxl
 
 ---
 
+## Observações
+
+Basta alterar os parâmetros de teste_simulador.sh, PAGE_SIZE e MEMSIZE, para observar diferentes comportamentos para diferentes entradas.

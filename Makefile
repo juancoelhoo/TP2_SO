@@ -4,6 +4,7 @@ SRC = src
 OBJ = obj
 BIN = bin
 RES = resultados
+GRA = graphs
 
 SOURCES = $(wildcard $(SRC)/*.c)
 OBJECTS = $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SOURCES))
@@ -24,6 +25,6 @@ $(BIN):
 	mkdir -p $(BIN)
 
 clean:
-	rm -rf $(OBJ)/*.o $(EXEC) $(RES)/*.txt
+	rm -rf $(OBJ)/*.o $(EXEC) $(RES)/*.txt $(GRA)/*.png  $(GRA)/*.xlsx 
 
 .PHONY: all clean
