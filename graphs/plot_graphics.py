@@ -1,32 +1,48 @@
+# -*- coding: utf-8 -*-
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Carregar dados
 df = pd.read_excel("resultados_simulador.xlsx")
 
-# Configuração de estilo
+df["arquivo"] = df["arquivo"].str.strip().str.lower()
+
+arquivos_esperados = ["compilador", "compressor", "matriz", "simulador"]
+algoritmos_esperados = sorted(df["algoritmo"].dropna().unique())
+
 sns.set(style="whitegrid")
 plt.rcParams["figure.figsize"] = (10, 6)
 
-# Função auxiliar
-def plot_metric(metric, ylabel, title, filename, kind="bar"):
+def plot_metric(metric, ylabel, title, filename, use_log = False):
     plt.figure()
-    sns.barplot(data=df, x="algoritmo", y=metric, hue="tabela", ci=None)
+    sns.barplot(
+        data=df,
+        x="algoritmo",
+        y=metric,
+        hue="arquivo",
+        order=algoritmos_esperados,
+        hue_order=arquivos_esperados,
+        ci=None
+    )
+    if use_log:
+        plt.yscale('log')
     plt.ylabel(ylabel)
+    plt.xlabel("Algoritmo")
     plt.title(title)
+    plt.legend(title="Arquivo de entrada", bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.tight_layout()
     plt.savefig(filename)
     plt.close()
 
 # 1. Page Faults
-plot_metric("page_faults", "Page Faults", "Page Faults por Algoritmo e Tabela", "page_faults.png")
+plot_metric("page_faults", "Page Faults (escala logaritmica)", "Page Faults por Algoritmo e Tabela", "page_faults.png", True)
 
 # 2. Dirty Pages
-plot_metric("dirty_pages", "Páginas Sujas", "Páginas Sujas por Algoritmo e Tabela", "dirty_pages.png")
+plot_metric("dirty_pages", "Páginas Sujas (escala logaritmica)", "Páginas Sujas por Algoritmo e Tabela", "dirty_pages.png", True)
 
 # 3. Substituições
-plot_metric("substituicoes", "Substituições", "Substituições por Algoritmo e Tabela", "substituicoes.png")
+plot_metric("substituicoes", "Substituições (escala logaritmica)", "Substituições por Algoritmo e Tabela", "substituicoes.png", True)
 
 # 4. Memória Usada
 plot_metric("memoria_usada_kb", "Memória Usada (KB)", "Uso de Memória por Estrutura de Tabela", "memoria_usada.png")
