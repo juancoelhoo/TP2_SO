@@ -38,6 +38,7 @@ for nome_arquivo in os.listdir(PASTA_RESULTADOS):
     if nome_arquivo.endswith(".txt"):
         caminho = os.path.join(PASTA_RESULTADOS, nome_arquivo)
         dados = extrair_dados_arquivo(caminho)
+        dados["arquivo"] = nome_arquivo.rsplit("_", 1)[-1].replace(".txt", "")
         dados["arquivo_saida"] = nome_arquivo
         dados_coletados.append(dados)
 
