@@ -18,7 +18,9 @@ regex_mappings = {
     "fault_rate": r"Taxa de page faults: ([\d.]+)%",
     "dirty_rate": r"Taxa de páginas sujas: ([\d.]+)%",
     "memoria_usada_kb": r"Memória usada pelas tabelas: \d+ bytes \(([\d.]+) KB\)",
-    "tempo_execucao": r"Tempo de execução: ([\d.]+) segundos"
+    "tempo_execucao": r"Tempo de execução: ([\d.]+) segundos",
+    "tamanho_memoria": r"Tamanho da memória: (\d+) KB",
+    "tamanho_pagina": r"Tamanho das páginas: (\d+) KB"
 }
 
 def extrair_dados_arquivo(caminho):
@@ -38,7 +40,14 @@ for nome_arquivo in os.listdir(PASTA_RESULTADOS):
     if nome_arquivo.endswith(".txt"):
         caminho = os.path.join(PASTA_RESULTADOS, nome_arquivo)
         dados = extrair_dados_arquivo(caminho)
-        dados["arquivo"] = nome_arquivo.rsplit("_", 1)[-1].replace(".txt", "")
+        
+        partes = nome_arquivo.split("_")
+        if len(partes) >= 3:
+            palavra = partes[1]
+        else:
+            palavra = nome_arquivo.replace(".txt", "")
+        
+        dados["arquivo"] = palavra
         dados["arquivo_saida"] = nome_arquivo
         dados_coletados.append(dados)
 
